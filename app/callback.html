@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+  <head>
+  </head>
+  <body>
+    <h1>This is the OAuth Callback page. You were redirected here by the GetSchooled OAuth flow.</h1>
+    <h2>Your OAuth Token is: <span id="access_token">UNKNOWN</span></h2>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        // extract access_token from query params
+        var results = (new RegExp(/access_token=([^&#]*)/)).exec(window.location.hash)
+		var access_token = "";
+		alert("test"+ results);
+        if (results) {
+          access_token = results[1];
+          $('#access_token').text(access_token);
+          // let's make an api call to confirm
+          $.ajax({
+            url: 'https://ct-staging.hyfnrsx1.com/api/hackathon/saves',
+            method: 'GET',
+            data: { access_token: access_token }
+          }).done(function(response){
+            console.log('SUCCESS');
+            console.log(response);
+          }).fail(function(){
+            console.log('FAIL');
+            console.log(arguments);
+          })
+        }
+      })
+    </script>
+  </body>
+</html>
